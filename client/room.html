@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatMeet — Room</title>
+    <link rel="stylesheet" href="style.css">
+    <script>
+        if (!sessionStorage.getItem('cm_name') || !sessionStorage.getItem('cm_room')) {
+            location.replace('index.html');
+        }
+    </script>
+    <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/emoji-mart@5.6.0/dist/browser.js"></script>
+</head>
+<body class="chat-page">
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+    <div class="sidebar-header">
+        <div class="app-logo">💬 <span>ChatMeet</span></div>
+        <div class="room-info">
+            <div class="ri-label">Room Code</div>
+            <div class="ri-code" id="roomCode">----</div>
+        </div>
+        <div class="room-actions">
+            <button class="btn-copy" onclick="copyCode()">📋 Copy</button>
+            <button class="btn-leave" onclick="leaveRoom()">🚪 Leave</button>
+        </div>
+    </div>
+
+    <div class="conn-status disconnected" id="connStatus">
+        <span class="conn-dot"></span>
+        <span id="connText">Connecting...</span>
+    </div>
+
+    <div class="search-wrap">
+        <input id="userSearch" placeholder="🔍 Search participants..." oninput="filterUsers()">
+    </div>
+    <div class="participants-title">Participants</div>
+    <ul class="participants-list" id="users"></ul>
+</div>
+
+<!-- CHAT AREA -->
+<div class="chat-area">
+    <div class="chat-header">
+        <div class="chat-header-icon">💬</div>
+        <div class="chat-header-info">
+            <h5 id="roomTitle">Chat Room</h5>
+            <small id="onlineCount">Connecting...</small>
+        </div>
+        <button class="header-search-btn" onclick="toggleChatSearch()" title="Search messages">🔍</button>
+    </div>
+
+    <div class="chat-search-bar" id="chatSearchBar">
+        <input id="chatSearchInput" placeholder="Search in messages..." oninput="searchMessages()">
+        <button class="search-close" onclick="closeChatSearch()">✕</button>
+    </div>
+
+    <div id="chatBox" class="chat-box"></div>
+    <div id="typing" class="typing-bar"></div>
+
+    <div id="replyPreview">
+        <div class="rp-text" id="replyText"></div>
+        <button class="rp-cancel" onclick="cancelReply()">✕</button>
+    </div>
+
+    <div class="chat-input-area">
+        <label class="file-label" for="fileInput" title="Attach file">📎</label>
+        <input type="file" id="fileInput" accept="image/*,.pdf,.doc,.docx,.txt,.zip">
+        <span id="fileNameTag"></span>
+        <div class="msg-input-wrap">
+            <input id="msg" placeholder="Type a message..." autocomplete="off">
+            <button id="emojiBtn" title="Emoji">😊</button>
+        </div>
+        <button class="send-btn" onclick="send()" title="Send message">
+            <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
+        </button>
+    </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div id="lightbox" onclick="closeLightbox()">
+    <img id="lightboxImg" src="" alt="Full size image">
+</div>
+
+<div id="toast"></div>
+<audio id="notifySound" preload="auto">
+    <source src="https://www.soundjay.com/buttons/sounds/button-3.mp3" type="audio/mpeg">
+</audio>
+
+<script src="chat.js"></script>
+</body>
+</html>

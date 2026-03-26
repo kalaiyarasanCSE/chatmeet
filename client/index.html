@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatMeet — Real-time Chat Rooms</title>
+    <meta name="description" content="Create or join a real-time chat room instantly. No sign-up required.">
+    <link rel="stylesheet" href="style.css">
+    <script>
+        if (sessionStorage.getItem('cm_name') && sessionStorage.getItem('cm_room')) {
+            location.replace('room.html');
+        }
+    </script>
+</head>
+<body class="auth-page">
+
+<div class="card">
+    <div class="logo">
+        <span class="logo-icon">💬</span>
+        <h1>Chat<span>Meet</span></h1>
+        <p>Instant rooms. No sign-up needed.</p>
+    </div>
+
+    <button class="btn-secondary" onclick="location.href='create.html'">
+        ✨ Create a New Room
+    </button>
+
+    <div class="divider"><hr><span>or join existing</span><hr></div>
+
+    <div class="inp-group">
+        <label>Room Code</label>
+        <input id="joinCode" placeholder="Enter 4-digit code" maxlength="4"
+               oninput="this.value=this.value.replace(/\D/g,'')">
+    </div>
+    <div class="inp-group">
+        <label>Your Name</label>
+        <input id="joinName" placeholder="What should we call you?" maxlength="20"
+               onkeypress="if(event.key==='Enter') joinRoom()">
+    </div>
+    <p class="err" id="joinErr"></p>
+    <button class="btn-primary" onclick="joinRoom()">🔑 Join Room</button>
+</div>
+
+<div id="toast"></div>
+
+<script>
+function joinRoom() {
+    const code = document.getElementById('joinCode').value.trim();
+    const name = document.getElementById('joinName').value.trim();
+    const err  = document.getElementById('joinErr');
+    if (!name) { err.style.display='block'; err.textContent='Please enter your name.'; return; }
+    if (!code || code.length < 4) { err.style.display='block'; err.textContent='Please enter a valid 4-digit room code.'; return; }
+    err.style.display = 'none';
+    sessionStorage.setItem('cm_name', name);
+    sessionStorage.setItem('cm_room', code);
+    sessionStorage.setItem('cm_isHost', 'false');
+    location.href = 'room.html';
+}
+</script>
+</body>
+</html>
