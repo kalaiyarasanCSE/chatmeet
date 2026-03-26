@@ -413,9 +413,9 @@ document.getElementById('emojiBtn').addEventListener('click', (e) => {
 document.addEventListener('click', () => { pickerEl.style.display = 'none'; });
 
 // ── Socket Connection ─────────────────────────────────
-const SERVER_URL = window.location.hostname === 'localhost'
+const SERVER_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
     ? 'http://localhost:3000'
-    : 'https://YOUR-APP-NAME.onrender.com'; // 👈 replace with your Render URL
+    : 'https://chatmeet-server.onrender.com';
 
 socket = io(SERVER_URL, {
     reconnection: true,
